@@ -16,11 +16,11 @@ A super simple Dart custom element could be created like this:
 import 'package:dart_web_components/dart_web_components.dart';
 import 'package:web/web.dart';
 
-class MyAutonomousElement implements OnConnected {
+class MyAutonomousElement implements ConnectedCallback {
   MyAutonomousElement(HTMLElement element);
 
   @override
-  void onConnected() {
+  void connectedCallback() {
     print('Hello world!');
   }
 }

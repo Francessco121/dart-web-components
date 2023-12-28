@@ -27,11 +27,11 @@ typedef ComponentConstructor<T> = T Function(HTMLElement element);
 /// 
 /// Example:
 /// ```dart
-/// class MyAutonomousElement implements OnConnected {
+/// class MyAutonomousElement implements ConnectedCallback {
 ///   MyAutonomousElement(HTMLElement element);
 /// 
 ///   @override
-///   void onConnected() {}
+///   void connectedCallback() {}
 /// }
 /// // ...
 /// define('my-autonomous-element', MyAutonomousElement.new);
