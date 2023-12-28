@@ -8,9 +8,9 @@ import 'extensions.dart';
 import 'form.dart';
 import 'lifecycle_callbacks.dart';
 
-final htmlElement = util.getProperty(window, 'HTMLElement');
-final htmlReflect = util.getProperty(window, 'Reflect');
-final htmlObject = util.getProperty(window, 'Object');
+final _htmlElement = util.getProperty(window, 'HTMLElement');
+final _htmlReflect = util.getProperty(window, 'Reflect');
+final _htmlObject = util.getProperty(window, 'Object');
 
 typedef ComponentConstructor<T> = T Function(HTMLElement element);
 
@@ -73,7 +73,7 @@ void define<T>(String name, ComponentConstructor<T> constructor, {
   // and proxy the lifecycle callbacks to the Dart class 
   Object ctor(Object self) {
     final selfCtor = util.getProperty(self, 'constructor');
-    final element = util.callMethod(htmlReflect, 'construct', [htmlElement, const [], selfCtor]) as HTMLElement;
+    final element = util.callMethod(_htmlReflect, 'construct', [_htmlElement, const [], selfCtor]) as HTMLElement;
 
     final dartClass = constructor(element);
     util.setProperty(element, '__#dartComponent', dartClass);
@@ -128,10 +128,10 @@ void define<T>(String name, ComponentConstructor<T> constructor, {
 
   // Set up proper prototype inheritance of HTMLElement
   final elementClass = js.allowInteropCaptureThis(ctor);
-  util.setProperty(elementClass, '__proto__', htmlElement);
+  util.setProperty(elementClass, '__proto__', _htmlElement);
 
   final elementProto = util.getProperty(elementClass, 'prototype');
-  util.setProperty(elementProto, '__proto__', util.getProperty(htmlElement, 'prototype'));
+  util.setProperty(elementProto, '__proto__', util.getProperty(_htmlElement, 'prototype'));
   util.setProperty(elementProto, 'constructor', elementClass);
 
   // Proxy custom element lifecycle callbacks (we'll remove unused callbacks later)
@@ -243,9 +243,9 @@ void define<T>(String name, ComponentConstructor<T> constructor, {
 }
 
 void _defineProperty(Object obj, String name, Map<String, dynamic> descriptor) {
-  util.callMethod(htmlObject, 'defineProperty', [obj, name, descriptor.jsify()]);
+  util.callMethod(_htmlObject, 'defineProperty', [obj, name, descriptor.jsify()]);
 }
 
 void _defineGetter(Object obj, String name, dynamic Function(Element self) getter) {
-  util.callMethod(htmlObject, 'defineProperty', [obj, name, {'get': js.allowInteropCaptureThis(getter)}.jsify()]);
+  util.callMethod(_htmlObject, 'defineProperty', [obj, name, {'get': js.allowInteropCaptureThis(getter)}.jsify()]);
 }
